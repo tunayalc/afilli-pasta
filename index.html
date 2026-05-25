@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Afilli Pasta & Cafe | Dijital QR Menü</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Afilli Pasta & Cafe'nin en özel el yapımı tatlıları, pastaları, aromatik sıcak kahveleri ve serinletici içecekleri içeren şık dijital QR menüsü.">
+  <meta name="keywords" content="afilli cafe, qr menü, dijital menü, pastane, tatlı, kahve, kahvaltı, istanbul cafe">
+  <meta name="author" content="Afilli Pasta & Cafe">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Afilli Pasta & Cafe | Dijital QR Menü">
+  <meta property="og:description" content="Kafemizin en seçkin lezzetlerini ve aromatik kahvelerini hemen keşfedin.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=600&auto=format&fit=crop&q=80">
+  
+  <!-- FontAwesome Icons for premium UI look -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- MOBILE FRAME CONTAINER -->
+  <main class="app-container" id="main-app">
+    
+    <!-- MAIN HEADER -->
+    <header class="main-header">
+      <button class="header-menu-btn" id="menu-toggle" aria-label="Menü Açar" title="Menü">
+        <i class="fa-solid fa-bars-staggered"></i>
+      </button>
+      <h1 class="header-title" id="cafe-title">Afilli Pasta & Cafe</h1>
+      <button class="header-qr-btn" id="qr-nav-btn" aria-label="QR Kodu Göster" title="QR Kodu">
+        <i class="fa-solid fa-qrcode"></i>
+      </button>
+    </header>
+
+    <!-- SEARCH BAR -->
+    <section class="search-wrapper" aria-label="Ürün Arama">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input 
+          type="text" 
+          id="search-input" 
+          class="search-input" 
+          placeholder="Tatlı veya içecek ara..."
+          aria-label="Menü içinde ara"
+        >
+        <button class="clear-search-btn" id="clear-search" aria-label="Aramayı Temizle">
+          <i class="fa-solid fa-circle-xmark"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- CATEGORY TABS -->
+    <nav class="tabs-wrapper" aria-label="Kategoriler">
+      <div class="tabs-container">
+        <button class="menu-tab active" data-category="tatli" id="tab-tatli">
+          <span>🍰</span> TATLI & PASTALAR
+        </button>
+        <button class="menu-tab" data-category="icecek" id="tab-icecek">
+          <span>☕</span> İÇECEKLER
+        </button>
+      </div>
+    </nav>
+
+    <!-- PRODUCTS FEED -->
+    <section class="products-feed" id="products-feed" aria-label="Ürün Listesi">
+      <!-- Dynamic products loaded from app.js go here -->
+    </section>
+
+    <!-- FLOATING BOTTOM NAVIGATION BAR -->
+    <nav class="bottom-nav" aria-label="Hızlı Erişim">
+      <button class="nav-btn" id="qr-view-btn" title="QR Kodu Paylaş">
+        <i class="fa-solid fa-qrcode"></i> QR Menü
+      </button>
+      <button class="nav-btn" id="direction-btn" title="Yol Tarifi Al">
+        <i class="fa-solid fa-location-dot"></i> Yol Tarifi
+      </button>
+      <button class="nav-btn" id="contact-btn" title="İletişime Geç">
+        <i class="fa-solid fa-phone"></i> İletişim
+      </button>
+    </nav>
+
+  </main>
+
+  <!-- --- SIDEBAR MENU NAVIGATION --- -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="sidebar" id="sidebar" aria-label="Yandan Menü">
+    <div class="sidebar-header">
+      <div class="sidebar-title">Afilli Cafe</div>
+      <button class="close-sidebar-btn" id="close-sidebar" aria-label="Kapat">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <nav class="sidebar-links">
+      <a href="#" class="sidebar-link"><i class="fa-solid fa-house"></i> Anasayfa</a>
+      <a href="https://instagram.com/afillipastacafe" target="_blank" class="sidebar-link"><i class="fa-brands fa-instagram"></i> Instagram'da Takip Et</a>
+      <a href="#" id="menu-qr-link" class="sidebar-link"><i class="fa-solid fa-qrcode"></i> Masa QR Kodları</a>
+      <a href="tel:+905077658978" class="sidebar-link"><i class="fa-solid fa-phone"></i> Hemen Ara</a>
+      <a href="https://wa.me/905077658978" target="_blank" class="sidebar-link"><i class="fa-brands fa-whatsapp"></i> WhatsApp Destek</a>
+    </nav>
+    <div class="sidebar-footer">
+      <p>Afilli Pasta & Cafe</p>
+      <p>Her Gün: 09:00 - 23:00</p>
+      <p>&copy; 2026 Tüm Hakları Saklıdır.</p>
+    </div>
+  </aside>
+
+  <!-- --- INTERACTIVE MODALS --- -->
+
+  <!-- 1. Contact Modal -->
+  <div class="modal-overlay" id="contact-modal" aria-hidden="true" role="dialog">
+    <div class="modal-content">
+      <button class="close-modal-btn" id="close-contact" aria-label="Kapat">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <h2 class="modal-title">İLETİŞİM BİLGİLERİ</h2>
+      <div class="contact-options">
+        <a href="tel:+905077658978" class="contact-card">
+          <i class="fa-solid fa-phone contact-card-icon"></i>
+          <div class="contact-card-details">
+            <h4>Müşteri Hattı</h4>
+            <p>0507 765 89 78</p>
+          </div>
+        </a>
+        <a href="https://wa.me/905077658978?text=Merhaba,%20dijital%20menünüz%20üzerinden%20ulaşıyorum." target="_blank" class="contact-card">
+          <i class="fa-brands fa-whatsapp contact-card-icon"></i>
+          <div class="contact-card-details">
+            <h4>WhatsApp Sipariş</h4>
+            <p>Hızlı mesajlaşma & destek</p>
+          </div>
+        </a>
+        <a href="https://instagram.com/afillipastacafe" target="_blank" class="contact-card">
+          <i class="fa-brands fa-instagram contact-card-icon"></i>
+          <div class="contact-card-details">
+            <h4>Instagram Sayfamız</h4>
+            <p>@afillipastacafe</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Direction Modal -->
+  <div class="modal-overlay" id="direction-modal" aria-hidden="true" role="dialog">
+    <div class="modal-content">
+      <button class="close-modal-btn" id="close-direction" aria-label="Kapat">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <h2 class="modal-title">YOL TARİFİ</h2>
+      <div class="direction-info">
+        <div class="direction-map-placeholder">
+          <!-- A stylish dark theme representation of map using Unsplash map texture or pattern -->
+          <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=400&auto=format&fit=crop&q=80" alt="Harita Konumu">
+        </div>
+        <p class="direction-address">
+          <strong>Afilli Pasta & Cafe</strong><br>
+          Kirazlı, Mevlana Cd. 52D D:58e<br>
+          34210 Bağcılar/İstanbul
+        </p>
+        <a 
+          href="https://maps.google.com/?q=Kirazli+Mevlana+Cd+52D+Bagcilar+Istanbul+Afilli+Cafe" 
+          target="_blank" 
+          class="direction-action-btn"
+        >
+          <i class="fa-solid fa-map-location-dot"></i> Haritada Aç
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. QR Menu Share Modal -->
+  <div class="modal-overlay" id="qr-modal" aria-hidden="true" role="dialog">
+    <div class="modal-content">
+      <button class="close-modal-btn" id="close-qr" aria-label="Kapat">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <h2 class="modal-title">QR Kod Menü</h2>
+      <div class="qr-container">
+        <div class="qr-box">
+          <!-- Dynamically generated QR code using public rapid API -->
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://afillipastacafe.com&color=2e1610" alt="QR Kod Menü" class="qr-code-img">
+        </div>
+        <p class="direction-address">
+          Bu QR kodu masanızdaki müşterilerinize okutarak menüye anında erişmelerini sağlayabilirsiniz.
+        </p>
+        <a href="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https://afillipastacafe.com&color=2e1610" download="afilli_menu_qr.png" target="_blank" class="direction-action-btn">
+          <i class="fa-solid fa-download"></i> Yüksek Çözünürlük İndir
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Dynamic Product Details Modal -->
+  <div class="modal-overlay" id="details-modal" aria-hidden="true" role="dialog">
+    <div class="details-modal-content">
+      <button class="close-details-btn" id="close-details" aria-label="Kapat">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div id="details-modal-body">
+        <!-- Dynamically loaded from app.js when clicking a product -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Main JavaScript Logic -->
+  <script src="app.js" defer></script>
+</body>
+</html>
