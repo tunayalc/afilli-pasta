@@ -891,70 +891,71 @@ mark {
 }
 
 /* ==========================================================================
-   👑 CEO ADMIN PANEL PREMIUM DARK GLASSMORPHISM STYLES
+   👑 CEO ADMIN PANEL - COHESIVE BRAND THEME (CREAM & CHOCOLATE)
    ========================================================================== */
 
 .admin-body {
   background-color: #120907 !important;
   background-image: radial-gradient(circle at 50% 50%, #2A140E 0%, #120907 100%) !important;
-  color: var(--bg-cream) !important;
+  color: var(--text-light) !important;
   min-height: 100vh;
-  font-family: var(--font-primary);
+  font-family: var(--font-family) !important;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
 }
 
-/* Comprehensive dark theme overrides to prevent light-theme inherits */
-.admin-body p,
-.admin-body span,
-.admin-body div {
-  color: var(--bg-cream);
+/* ==================== TYPOGRAPHY & CONTRAST OVERRIDES ==================== */
+/* Ensures all text inside the cream admin panels is 100% readable deep brown, exactly like the menu cards! */
+.admin-login-card,
+.stat-card,
+.admin-table-container,
+.admin-modal-content,
+.admin-confirm-content {
+  background-color: var(--card-bg) !important;
+  color: var(--text-dark) !important;
+  border-left: 5px solid var(--accent-gold) !important;
+  box-shadow: var(--card-shadow) !important;
+  border-radius: var(--border-radius-lg) !important;
 }
 
-.admin-body td {
-  color: rgba(250, 245, 236, 0.95) !important;
+/* Ensure no transparent white borders leak grey */
+.admin-login-card {
+  border-top: 1px solid rgba(212, 163, 91, 0.25) !important;
+  border-right: 1px solid rgba(212, 163, 91, 0.25) !important;
+  border-bottom: 1px solid rgba(212, 163, 91, 0.25) !important;
 }
 
-.admin-body th {
-  color: var(--accent-gold) !important;
-  font-weight: 600;
+.admin-login-card p, .admin-login-card span, .admin-login-card div,
+.stat-card p, .stat-card span, .stat-card div,
+.admin-table-container p, .admin-table-container span, .admin-table-container div, .admin-table-container td,
+.admin-modal-content p, .admin-modal-content span, .admin-modal-content div,
+.admin-confirm-content p, .admin-confirm-content span, .admin-confirm-content div {
+  color: var(--text-dark) !important;
 }
 
-.admin-body h1,
-.admin-body h2,
-.admin-body h3,
-.admin-body h4,
-.admin-body label {
-  color: var(--accent-gold) !important;
-  font-family: var(--font-secondary);
+.admin-login-card h1, .admin-login-card h2, .admin-login-card h3, .admin-login-card h4,
+.stat-card h1, .stat-card h2, .stat-card h3, .stat-card h4,
+.admin-table-container h1, .admin-table-container h2, .admin-table-container h3, .admin-table-container h4,
+.admin-modal-content h1, .admin-modal-content h2, .admin-modal-content h3, .admin-modal-content h4,
+.admin-confirm-content h1, .admin-confirm-content h2, .admin-confirm-content h3, .admin-confirm-content h4 {
+  color: var(--text-dark) !important;
+  font-family: var(--font-family) !important;
+  font-weight: 800 !important;
 }
 
-.admin-body input,
-.admin-body textarea,
-.admin-body select {
-  color: var(--bg-cream) !important;
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700 !important;
+  color: var(--text-dark) !important;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
-.admin-body select option {
-  background-color: var(--primary-dark) !important;
-  color: var(--bg-cream) !important;
-}
-
-.admin-body .admin-desc-truncate {
-  color: rgba(250, 245, 236, 0.65) !important;
-}
-
-.admin-body .stat-card h3 {
-  color: rgba(250, 245, 236, 0.5) !important;
-}
-
-.admin-body .stat-card p {
-  color: var(--bg-cream) !important;
-}
-
-/* Login Page Layout */
+/* ==================== LOGIN PAGE LAYOUT ==================== */
 .admin-login-wrapper {
   display: flex;
   align-items: center;
@@ -964,15 +965,9 @@ mark {
 }
 
 .admin-login-card {
-  background: rgba(28, 14, 10, 0.96) !important;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 2px solid var(--accent-gold) !important;
-  border-radius: var(--border-radius-lg);
-  padding: 40px 30px;
+  padding: 45px 35px;
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 35px rgba(212, 163, 91, 0.15), inset 0 0 10px rgba(255, 255, 255, 0.02) !important;
   text-align: center;
 }
 
@@ -983,45 +978,31 @@ mark {
 .login-logo {
   font-size: 3.5rem;
   margin-bottom: 10px;
-  filter: drop-shadow(0 0 12px rgba(212, 163, 91, 0.5));
-  animation: pulse-glow 2.5s infinite ease-in-out;
+  filter: drop-shadow(0 4px 6px rgba(46, 22, 16, 0.15));
+  animation: pulse-glow-brand 2.5s infinite ease-in-out;
 }
 
-@keyframes pulse-glow {
-  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 12px rgba(212, 163, 91, 0.5)); }
-  50% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(212, 163, 91, 0.8)); }
+@keyframes pulse-glow-brand {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 .login-header h2 {
-  font-family: var(--font-secondary);
-  color: var(--accent-gold);
   font-size: 1.8rem;
-  margin: 0 0 5px 0;
-  letter-spacing: 1px;
+  margin: 0 0 6px 0;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .login-header p {
-  color: rgba(250, 245, 236, 0.6);
+  color: var(--text-muted) !important;
   font-size: 0.9rem;
+  font-weight: 500;
   margin: 0;
 }
 
 .login-form {
   text-align: left;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--accent-gold);
-  margin-bottom: 8px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
 }
 
 .input-with-icon {
@@ -1030,13 +1011,15 @@ mark {
 
 .input-with-icon i {
   position: absolute;
-  left: 15px;
+  left: 16px;
   top: 50%;
   transform: translateY(-50%);
-  color: rgba(212, 163, 91, 0.6) !important;
+  color: var(--text-dark) !important;
+  opacity: 0.65;
   font-size: 1rem;
 }
 
+/* ==================== FORM INPUTS, TEXTAREAS, SELECTS ==================== */
 .input-with-icon input,
 .admin-form input[type="text"],
 .admin-form input[type="number"],
@@ -1044,13 +1027,14 @@ mark {
 .admin-form select {
   width: 100%;
   padding: 14px 16px 14px 45px;
-  background: #120907 !important;
-  border: 1px solid rgba(212, 163, 91, 0.3) !important;
-  border-radius: var(--border-radius-sm);
-  color: var(--bg-cream) !important;
-  font-family: var(--font-primary);
+  background: #FFFFFF !important;
+  border: 1.5px solid rgba(46, 22, 16, 0.18) !important;
+  border-radius: var(--border-radius-sm) !important;
+  color: var(--text-dark) !important;
+  font-family: var(--font-family) !important;
   font-size: 0.95rem;
-  transition: all 0.3s ease;
+  font-weight: 500 !important;
+  transition: var(--transition-smooth);
   box-sizing: border-box;
 }
 
@@ -1064,7 +1048,7 @@ mark {
 .input-with-icon input::placeholder,
 .admin-form input::placeholder,
 .admin-form textarea::placeholder {
-  color: rgba(250, 245, 236, 0.35) !important;
+  color: rgba(46, 22, 16, 0.4) !important;
 }
 
 .input-with-icon input:focus,
@@ -1072,20 +1056,26 @@ mark {
 .admin-form textarea:focus,
 .admin-form select:focus {
   outline: none;
-  border-color: var(--accent-gold-hover) !important;
-  background: #1C0E0A !important;
-  box-shadow: 0 0 15px rgba(227, 180, 108, 0.3) !important;
+  border-color: var(--accent-gold) !important;
+  background: #FAF5EC !important;
+  box-shadow: 0 0 10px rgba(212, 163, 91, 0.25) !important;
+}
+
+.admin-body select option {
+  background-color: var(--card-bg) !important;
+  color: var(--text-dark) !important;
 }
 
 .error-message {
-  color: #ff6b6b;
+  color: #d9534f;
   font-size: 0.85rem;
+  font-weight: 600;
   margin: 12px 0;
   text-align: center;
   min-height: 18px;
 }
 
-/* Dashboard UI Layout */
+/* ==================== DASHBOARD HEADER ==================== */
 .admin-dashboard-wrapper {
   max-width: 1200px;
   width: 100%;
@@ -1096,12 +1086,15 @@ mark {
 }
 
 .admin-header {
+  background-color: var(--accent-gold) !important;
+  padding: 18px 24px !important;
+  border-radius: var(--border-radius-sm) !important;
+  box-shadow: var(--card-shadow) !important;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-  padding-bottom: 20px;
   margin-bottom: 30px;
+  border-left: 5px solid var(--text-dark) !important;
 }
 
 .admin-brand {
@@ -1112,21 +1105,22 @@ mark {
 
 .admin-crown {
   font-size: 2.2rem;
-  filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.4));
+  filter: drop-shadow(0 2px 4px rgba(46, 22, 16, 0.2));
 }
 
 .admin-brand h1 {
-  font-family: var(--font-secondary);
-  color: var(--accent-gold);
-  font-size: 1.6rem;
-  margin: 0 0 4px 0;
-  letter-spacing: 0.5px;
+  color: var(--text-dark) !important;
+  font-size: 1.5rem !important;
+  font-weight: 800 !important;
+  margin: 0 0 2px 0 !important;
+  text-transform: uppercase;
 }
 
 .admin-brand p {
-  color: rgba(250, 245, 236, 0.6);
-  font-size: 0.85rem;
-  margin: 0;
+  color: rgba(46, 22, 16, 0.75) !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
 }
 
 .admin-header-actions {
@@ -1134,7 +1128,7 @@ mark {
   gap: 12px;
 }
 
-/* Premium Buttons */
+/* ==================== BUTTONS STYLING ==================== */
 .admin-btn-primary,
 .admin-btn-danger,
 .admin-btn-accent,
@@ -1145,66 +1139,86 @@ mark {
   gap: 8px;
   padding: 12px 24px;
   border-radius: var(--border-radius-sm);
-  font-family: var(--font-primary);
+  font-family: var(--font-family);
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: var(--transition-smooth);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .admin-btn-primary {
-  background: var(--accent-gold);
-  color: var(--primary-dark);
-  border: 1px solid var(--accent-gold);
+  background: var(--accent-gold) !important;
+  color: var(--text-dark) !important;
+  border: 1px solid var(--accent-gold) !important;
+  box-shadow: 0 4px 8px rgba(212, 163, 91, 0.15);
 }
 
 .admin-btn-primary:hover {
-  background: #c39e2e;
-  border-color: #c39e2e;
+  background: var(--accent-gold-hover) !important;
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 6px 15px rgba(212, 163, 91, 0.3) !important;
+}
+
+#btn-add-product {
+  background-color: var(--text-dark) !important;
+  color: var(--card-bg) !important;
+  border: 1px solid var(--text-dark) !important;
+}
+
+#btn-add-product:hover {
+  background-color: var(--primary-bg) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
 .admin-btn-accent {
-  background: linear-gradient(135deg, var(--accent-gold) 0%, #a4821a 100%);
-  color: white;
-  border: none;
+  background: linear-gradient(135deg, var(--accent-gold) 0%, #b88d4c 100%) !important;
+  color: var(--text-dark) !important;
+  border: none !important;
 }
 
 .admin-btn-accent:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
-  filter: brightness(1.1);
+  box-shadow: 0 5px 15px rgba(212, 163, 91, 0.35) !important;
+  filter: brightness(1.05);
 }
 
 .admin-btn-danger {
-  background: #e74c3c;
-  color: white;
-  border: 1px solid #e74c3c;
+  background: #d9534f !important;
+  color: white !important;
+  border: 1px solid #d9534f !important;
 }
 
 .admin-btn-danger:hover {
-  background: #c0392b;
-  border-color: #c0392b;
+  background: #c9302c !important;
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+  box-shadow: 0 5px 15px rgba(217, 83, 79, 0.3) !important;
 }
 
 .admin-btn-outline {
-  background: transparent;
-  color: var(--bg-cream);
-  border: 1px solid rgba(250, 245, 236, 0.2);
+  background: transparent !important;
+  color: var(--text-dark) !important;
+  border: 1.5px solid rgba(46, 22, 16, 0.4) !important;
 }
 
 .admin-btn-outline:hover {
-  background: rgba(250, 245, 236, 0.05);
-  border-color: var(--accent-gold);
-  color: var(--accent-gold);
+  background: rgba(46, 22, 16, 0.05) !important;
+  border-color: var(--text-dark) !important;
 }
 
-/* Stats Cards */
+#btn-logout {
+  background-color: transparent !important;
+  color: var(--text-dark) !important;
+  border: 1.5px solid rgba(46, 22, 16, 0.4) !important;
+}
+
+#btn-logout:hover {
+  background-color: rgba(46, 22, 16, 0.08) !important;
+}
+
+/* ==================== STATS CARDS ==================== */
 .admin-stats-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1213,74 +1227,64 @@ mark {
 }
 
 .stat-card {
-  background: #25120d !important;
-  border: 1px solid rgba(212, 163, 91, 0.25) !important;
-  border-radius: var(--border-radius-md);
   padding: 22px 25px;
   display: flex;
   align-items: center;
   gap: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
 }
 
 .stat-card i {
   font-size: 2.2rem;
-  color: var(--accent-gold);
-  background: rgba(212, 175, 55, 0.1);
+  color: var(--text-dark) !important;
+  background: rgba(212, 163, 91, 0.15) !important;
   padding: 15px;
   border-radius: var(--border-radius-sm);
 }
 
 .stat-card h3 {
-  font-size: 0.9rem;
-  color: rgba(250, 245, 236, 0.5);
+  font-size: 0.9rem !important;
+  color: var(--text-muted) !important;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin: 0 0 6px 0;
 }
 
 .stat-card p {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--bg-cream);
+  font-size: 1.6rem !important;
+  font-weight: 800 !important;
   margin: 0;
 }
 
 /* Connection Badges */
 .badge-live {
-  color: #2ecc71;
+  color: #27ae60 !important;
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 700;
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
 
 .badge-offline {
-  color: #f1c40f;
+  color: #d35400 !important;
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 700;
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
 
-/* Tables Styling */
+/* ==================== TABLES STYLING ==================== */
 .admin-table-container {
-  background: #25120d !important;
-  border: 1px solid rgba(212, 163, 91, 0.2) !important;
-  border-radius: var(--border-radius-md);
   padding: 25px;
   margin-bottom: 40px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4) !important;
 }
 
 .table-title {
-  font-family: var(--font-secondary);
-  color: var(--accent-gold);
-  font-size: 1.3rem;
+  color: var(--text-dark) !important;
+  font-size: 1.3rem !important;
   margin: 0 0 20px 0;
-  border-left: 4px solid var(--accent-gold);
+  border-left: 4px solid var(--accent-gold) !important;
   padding-left: 12px;
 }
 
@@ -1297,23 +1301,32 @@ mark {
 
 .admin-table th {
   padding: 15px 12px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.82rem;
+  font-weight: 700 !important;
   text-transform: uppercase;
-  color: var(--accent-gold);
+  color: var(--bg-cream) !important;
+  background-color: var(--text-dark) !important;
   letter-spacing: 0.5px;
-  border-bottom: 2px solid rgba(250, 245, 236, 0.1);
+  border-bottom: none;
 }
 
 .admin-table td {
   padding: 16px 12px;
   font-size: 0.95rem;
-  border-bottom: 1px solid rgba(250, 245, 236, 0.05);
+  border-bottom: 1px solid rgba(46, 22, 16, 0.08) !important;
   vertical-align: middle;
 }
 
+.admin-table tbody tr {
+  background: transparent !important;
+}
+
+.admin-table tbody tr:nth-child(even) {
+  background: rgba(46, 22, 16, 0.03) !important;
+}
+
 .admin-table tbody tr:hover {
-  background: rgba(250, 245, 236, 0.02);
+  background: rgba(212, 163, 91, 0.1) !important;
 }
 
 .table-img {
@@ -1321,8 +1334,8 @@ mark {
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--accent-gold);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  border: 2px solid var(--accent-gold) !important;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.12);
 }
 
 .admin-desc-truncate {
@@ -1331,26 +1344,27 @@ mark {
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0;
-  color: rgba(250, 245, 236, 0.7);
+  color: var(--text-muted) !important;
   font-size: 0.88rem;
 }
 
 .badge-tag {
-  background: rgba(212, 175, 55, 0.15);
-  color: var(--accent-gold);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(212, 163, 91, 0.18) !important;
+  color: var(--text-dark) !important;
+  border: 1px solid rgba(212, 163, 91, 0.4) !important;
   padding: 4px 10px;
   border-radius: 20px;
   font-size: 0.8rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .badge-empty {
-  color: rgba(250, 245, 236, 0.3);
+  color: rgba(46, 22, 16, 0.4) !important;
   font-size: 0.85rem;
+  font-weight: 500;
 }
 
-/* Action Buttons */
+/* Action Buttons in Table Rows */
 .actions-header {
   text-align: right;
   padding-right: 20px !important;
@@ -1370,60 +1384,76 @@ mark {
   height: 34px;
   border-radius: var(--border-radius-sm);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition-smooth);
   margin-left: 6px;
   font-size: 0.9rem;
 }
 
 .edit-btn {
-  background: rgba(212, 175, 55, 0.15);
-  color: var(--accent-gold);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(212, 163, 91, 0.18) !important;
+  color: var(--text-dark) !important;
+  border: 1px solid rgba(212, 163, 91, 0.4) !important;
 }
 
 .edit-btn:hover {
-  background: var(--accent-gold);
-  color: var(--primary-dark);
+  background: var(--accent-gold) !important;
+  color: var(--text-dark) !important;
 }
 
 .delete-btn {
-  background: rgba(231, 76, 60, 0.15);
-  color: #ff6b6b;
-  border: 1px solid rgba(231, 76, 60, 0.3);
+  background: rgba(217, 83, 79, 0.12) !important;
+  color: #d9534f !important;
+  border: 1px solid rgba(217, 83, 79, 0.3) !important;
 }
 
 .delete-btn:hover {
-  background: #e74c3c;
-  color: white;
+  background: #d9534f !important;
+  color: white !important;
 }
 
-/* Custom Admin Modal Forms styling */
+/* ==================== ADMIN MODALS (ADD / EDIT / CONFIRM) ==================== */
 .admin-modal-content {
-  background: #25120d;
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  border-radius: var(--border-radius-md);
+  border-left: 6px solid var(--accent-gold) !important;
   padding: 35px;
   width: 100%;
   max-width: 600px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
   position: relative;
   box-sizing: border-box;
 }
 
 .admin-confirm-content {
-  background: #25120d;
-  border: 1px solid #e74c3c;
-  border-radius: var(--border-radius-md);
+  border-left: 6px solid #d9534f !important;
   padding: 30px;
   width: 100%;
   max-width: 400px;
   text-align: center;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+}
+
+.close-modal-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: var(--text-dark) !important;
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: var(--transition-smooth);
+}
+
+.close-modal-btn:hover {
+  background-color: rgba(46, 22, 16, 0.08) !important;
 }
 
 .confirm-icon {
   font-size: 3rem;
-  color: #e74c3c;
+  color: #d9534f;
   margin-bottom: 15px;
 }
 
@@ -1453,8 +1483,8 @@ mark {
   display: flex;
   gap: 20px;
   align-items: center;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px dashed rgba(250, 245, 236, 0.15);
+  background: rgba(46, 22, 16, 0.03) !important;
+  border: 1.5px dashed rgba(46, 22, 16, 0.25) !important;
   padding: 15px;
   border-radius: var(--border-radius-sm);
 }
@@ -1463,8 +1493,8 @@ mark {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.4);
-  border: 2px solid rgba(212, 175, 55, 0.3);
+  background: rgba(46, 22, 16, 0.05) !important;
+  border: 2px solid var(--accent-gold) !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1479,7 +1509,7 @@ mark {
 
 #preview-placeholder {
   font-size: 0.75rem;
-  color: rgba(250, 245, 236, 0.4);
+  color: var(--text-muted) !important;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -1503,7 +1533,7 @@ mark {
 
 .upload-tip {
   font-size: 0.75rem;
-  color: rgba(250, 245, 236, 0.4);
+  color: var(--text-muted) !important;
   margin: 0;
 }
 
@@ -1512,7 +1542,7 @@ mark {
   justify-content: flex-end;
   gap: 15px;
   margin-top: 30px;
-  border-top: 1px solid rgba(250, 245, 236, 0.05);
+  border-top: 1.5px dashed rgba(46, 22, 16, 0.15) !important;
   padding-top: 20px;
 }
 
@@ -1548,4 +1578,5 @@ mark {
     text-align: center;
   }
 }
+
 
