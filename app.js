@@ -1,6 +1,22 @@
 // Afilli Pasta & Cafe - Premium Digital QR Menu Database and Logic (With Curated Images)
 
-const products = [
+// ==================== DATABASE CONFIGURATION ====================
+const SUPABASE_URL = "YOUR_SUPABASE_URL";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+
+let supabase = null;
+let isLiveDatabase = false;
+
+if (SUPABASE_URL !== "YOUR_SUPABASE_URL" && SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY") {
+  try {
+    supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    isLiveDatabase = true;
+  } catch (e) {
+    console.error("Supabase init failed. Operating in cache mode.", e);
+  }
+}
+
+let products = [
   // ==================== TATLI & PASTALAR ====================
   {
     id: "t1",
@@ -275,8 +291,38 @@ document.addEventListener("DOMContentLoaded", () => {
   setupEventListeners();
 });
 
-function initMenu() {
+async function initMenu() {
+  // 1. First render using local fallback dataset (instant load)
+  // Check if there are local modifications in LocalStorage (for local CEO Panel testing)
+  const localData = localStorage.getItem("afilli_menu_products");
+  if (localData) {
+    try {
+      products = JSON.parse(localData);
+    } catch (e) {
+      console.error("Local data parsing failed, using fallback.", e);
+    }
+  }
   renderProducts();
+
+  // 2. If Supabase is active, fetch real-time cloud data
+  if (isLiveDatabase && supabase) {
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        console.error("Supabase fetch failed, operating in cache mode.", error);
+      } else if (data && data.length > 0) {
+        // Overwrite active products list with live cloud database
+        products = data;
+        renderProducts();
+      }
+    } catch (e) {
+      console.error("Supabase request error, using cached data.", e);
+    }
+  }
 }
 
 function setupEventListeners() {
