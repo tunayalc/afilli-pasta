@@ -4,12 +4,12 @@
 const SUPABASE_URL = "YOUR_SUPABASE_URL";
 const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
 
-let supabase = null;
+let supabaseClient = null;
 let isLiveDatabase = false;
 
 if (SUPABASE_URL !== "YOUR_SUPABASE_URL" && SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY") {
   try {
-    supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     isLiveDatabase = true;
   } catch (e) {
     console.error("Supabase init failed. Operating in cache mode.", e);
@@ -305,9 +305,9 @@ async function initMenu() {
   renderProducts();
 
   // 2. If Supabase is active, fetch real-time cloud data
-  if (isLiveDatabase && supabase) {
+  if (isLiveDatabase && supabaseClient) {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from("products")
         .select("*")
         .order("created_at", { ascending: true });

@@ -5,13 +5,13 @@
 const SUPABASE_URL = "YOUR_SUPABASE_URL";
 const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
 
-let supabase = null;
+let supabaseClient = null;
 let isLiveDatabase = false;
 
 // Attempt to initialize Supabase
 if (SUPABASE_URL !== "YOUR_SUPABASE_URL" && SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY") {
   try {
-    supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     isLiveDatabase = true;
   } catch (error) {
     console.error("Supabase connection failed, falling back to local database.", error);
@@ -78,8 +78,8 @@ async function checkSession() {
   const sessionKey = "afilli_admin_logged_in";
   let isLoggedIn = false;
 
-  if (isLiveDatabase) {
-    const { data } = await supabase.auth.getSession();
+  if (isLiveDatabase && supabaseClient) {
+    const { data } = await supabaseClient.auth.getSession();
     isLoggedIn = !!data.session;
   } else {
     isLoggedIn = localStorage.getItem(sessionKey) === "true";
@@ -100,8 +100,8 @@ async function handleLogin(e) {
   const errorEl = document.getElementById("login-error");
   errorEl.innerText = "";
 
-  if (isLiveDatabase) {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (isLiveDatabase && supabaseClient) {
+    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
     if (error) {
       errorEl.innerText = "Giriş Başarısız: " + error.message;
     } else {
@@ -119,8 +119,8 @@ async function handleLogin(e) {
 }
 
 async function handleLogout() {
-  if (isLiveDatabase) {
-    await supabase.auth.signOut();
+  if (isLiveDatabase && supabaseClient) {
+    await supabaseClient.auth.signOut();
   } else {
     localStorage.removeItem("afilli_admin_logged_in");
   }
@@ -140,8 +140,8 @@ async function showDashboard() {
 
 // ==================== 4. CRUD OPERATIONS ====================
 async function fetchProducts() {
-  if (isLiveDatabase) {
-    const { data, error } = await supabase
+  if (isLiveDatabase && supabaseClient) {
+    const { data, error } = await supabaseClient
       .from("products")
       .select("*")
       .order("created_at", { ascending: true });
@@ -289,13 +289,13 @@ async function handleProductSave(e) {
   } else if (imageFileInput.files.length > 0) {
     const file = imageFileInput.files[0];
     
-    if (isLiveDatabase) {
+    if (isLiveDatabase && supabaseClient) {
       // Live Supabase Bucket Upload
       const fileExt = file.name.split('.').pop();
       const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
       const filePath = `menu-items/${fileName}`;
 
-      const { data, error } = await supabase.storage
+      const { data, error } = await supabaseClient.storage
         .from('product-images')
         .upload(filePath, file);
 
@@ -305,7 +305,7 @@ async function handleProductSave(e) {
       }
       
       // Get Public URL
-      const { data: publicUrlData } = supabase.storage
+      const { data: publicUrlData } = supabaseClient.storage
         .from('product-images')
         .getPublicUrl(filePath);
 
@@ -324,10 +324,10 @@ async function handleProductSave(e) {
   }
 
   // 2. Perform Save / DB mutation
-  if (isLiveDatabase) {
+  if (isLiveDatabase && supabaseClient) {
     if (activeEditId) {
       // Edit Mode
-      const { error } = await supabase
+      const { error } = await supabaseClient
         .from("products")
         .update({ name, category, price, tag, description, image: imageUrl })
         .eq("id", activeEditId);
@@ -339,7 +339,7 @@ async function handleProductSave(e) {
     } else {
       // Create Mode
       const newId = category.charAt(0) + (Date.now()).toString();
-      const { error } = await supabase
+      const { error } = await supabaseClient
         .from("products")
         .insert([{ id: newId, name, category, price, tag, description, image: imageUrl }]);
 
@@ -385,8 +385,8 @@ async function handleProductSave(e) {
 async function handleDeleteProduct() {
   if (!activeDeleteId) return;
 
-  if (isLiveDatabase) {
-    const { error } = await supabase
+  if (isLiveDatabase && supabaseClient) {
+    const { error } = await supabaseClient
       .from("products")
       .delete()
       .eq("id", activeDeleteId);
