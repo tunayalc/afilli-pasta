@@ -891,15 +891,63 @@ mark {
    ========================================================================== */
 
 .admin-body {
-  background-color: var(--primary-dark);
-  background-image: radial-gradient(circle at 10% 20%, rgba(90, 40, 20, 0.15) 0%, rgba(20, 10, 5, 0.4) 90.1%);
-  color: var(--bg-cream);
+  background-color: var(--primary-dark) !important;
+  background-image: radial-gradient(circle at 10% 20%, rgba(90, 40, 20, 0.15) 0%, rgba(20, 10, 5, 0.4) 90.1%) !important;
+  color: var(--bg-cream) !important;
   min-height: 100vh;
   font-family: var(--font-primary);
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
+}
+
+/* Comprehensive dark theme overrides to prevent light-theme inherits */
+.admin-body p,
+.admin-body span,
+.admin-body div {
+  color: var(--bg-cream);
+}
+
+.admin-body td {
+  color: rgba(250, 245, 236, 0.95) !important;
+}
+
+.admin-body th {
+  color: var(--accent-gold) !important;
+  font-weight: 600;
+}
+
+.admin-body h1,
+.admin-body h2,
+.admin-body h3,
+.admin-body h4,
+.admin-body label {
+  color: var(--accent-gold) !important;
+  font-family: var(--font-secondary);
+}
+
+.admin-body input,
+.admin-body textarea,
+.admin-body select {
+  color: var(--bg-cream) !important;
+}
+
+.admin-body select option {
+  background-color: var(--primary-dark) !important;
+  color: var(--bg-cream) !important;
+}
+
+.admin-body .admin-desc-truncate {
+  color: rgba(250, 245, 236, 0.65) !important;
+}
+
+.admin-body .stat-card h3 {
+  color: rgba(250, 245, 236, 0.5) !important;
+}
+
+.admin-body .stat-card p {
+  color: var(--bg-cream) !important;
 }
 
 /* Login Page Layout */
