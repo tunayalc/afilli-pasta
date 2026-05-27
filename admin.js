@@ -212,7 +212,13 @@ async function fetchProducts() {
   } else {
     const local = localStorage.getItem("afilli_menu_products");
     if (local) {
-      productsList = JSON.parse(local);
+      const parsed = JSON.parse(local);
+      if (parsed && parsed.length > 0) {
+        productsList = parsed;
+      } else {
+        productsList = [...fallbackProducts];
+        saveLocalDB();
+      }
     } else {
       productsList = [...fallbackProducts];
       saveLocalDB();
@@ -667,6 +673,15 @@ function setupEventListeners() {
     document.getElementById("category-form").reset();
     document.getElementById("category-form-error").innerText = "";
     openModal("category-modal");
+  });
+  document.getElementById("btn-reset-menu").addEventListener("click", async () => {
+    if (confirm("Tüm değişikliklerinizi sıfırlayıp 29 ürünlük orijinal şık demo menüyü geri yüklemek istediğinize emin misiniz?")) {
+      localStorage.removeItem("afilli_menu_products");
+      localStorage.removeItem("afilli_menu_categories");
+      loadCategories();
+      await fetchProducts();
+      alert("Menü başarıyla varsayılan demo ayarlarına sıfırlandı!");
+    }
   });
   document.getElementById("btn-confirm-delete").addEventListener("click", handleDeleteProduct);
   

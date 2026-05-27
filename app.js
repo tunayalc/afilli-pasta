@@ -351,7 +351,10 @@ async function initMenu() {
   const localData = localStorage.getItem("afilli_menu_products");
   if (localData) {
     try {
-      products = JSON.parse(localData);
+      const parsed = JSON.parse(localData);
+      if (parsed && parsed.length > 0) {
+        products = parsed;
+      }
     } catch (e) {
       console.error("Local data parsing failed, using fallback.", e);
     }
