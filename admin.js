@@ -108,12 +108,12 @@ async function handleLogin(e) {
       showDashboard();
     }
   } else {
-    // Mock Mode Credentials: ceo@afillipasta.com / 123
-    if (email === "ceo@afillipasta.com" && password === "123") {
+    // Mock Mode Credentials: ceo@afillipasta.com / 151096
+    if (email === "ceo@afillipasta.com" && password === "151096") {
       localStorage.setItem("afilli_admin_logged_in", "true");
       showDashboard();
     } else {
-      errorEl.innerText = "Kullanıcı adı veya şifre yanlış! (Lokal Mod Varsayılan: ceo@afillipasta.com / Şifre: 123)";
+      errorEl.innerText = "Kullanıcı adı veya şifre yanlış!";
     }
   }
 }
