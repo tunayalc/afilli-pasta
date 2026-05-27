@@ -202,14 +202,24 @@ body {
 .tabs-container {
   display: flex;
   gap: 12px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  padding-bottom: 4px;
+}
+
+.tabs-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
 }
 
 .menu-tab {
-  flex: 1;
+  flex-shrink: 0;
+  white-space: nowrap;
   background: none;
   border: 1px solid rgba(214, 163, 91, 0.3);
   color: rgba(250, 245, 236, 0.7);
-  padding: 12px 10px;
+  padding: 12px 20px;
   font-family: var(--font-family);
   font-size: 0.9rem;
   font-weight: 700;

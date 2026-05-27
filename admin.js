@@ -56,10 +56,66 @@ const fallbackProducts = [
 let productsList = [];
 let activeEditId = null;
 let activeDeleteId = null;
+let activeDeleteType = null; // 'product' or 'category'
 let currentUploadedBase64 = null;
+
+// Dynamic Categories
+const defaultCategories = [
+  { id: "tatli", name: "Tatlı & Pastalar", icon: "🍰" },
+  { id: "icecek", name: "İçecekler", icon: "☕" }
+];
+let categoriesList = [];
+
+function loadCategories() {
+  const localCats = localStorage.getItem("afilli_menu_categories");
+  if (localCats) {
+    try {
+      categoriesList = JSON.parse(localCats);
+    } catch (e) {
+      console.error("Failed to parse categories, using default.", e);
+      categoriesList = [...defaultCategories];
+    }
+  } else {
+    categoriesList = [...defaultCategories];
+    saveCategories();
+  }
+}
+
+function saveCategories() {
+  localStorage.setItem("afilli_menu_categories", JSON.stringify(categoriesList));
+}
+
+function renderCategoryDropdown() {
+  const selectEl = document.getElementById("product-category");
+  if (!selectEl) return;
+
+  selectEl.innerHTML = "";
+  categoriesList.forEach(cat => {
+    const opt = document.createElement("option");
+    opt.value = cat.id;
+    opt.innerText = `${cat.icon} ${cat.name}`;
+    selectEl.appendChild(opt);
+  });
+}
+
+function slugify(text) {
+  let trMap = {
+    'ç': 'c', 'ğ': 'g', 'ı': 'i', 'ö': 'o', 'ş': 's', 'ü': 'u',
+    'Ç': 'c', 'Ğ': 'g', 'İ': 'i', 'Ö': 'o', 'Ş': 's', 'Ü': 'u'
+  };
+  for (let key in trMap) {
+    text = text.replace(new RegExp(key, 'g'), trMap[key]);
+  }
+  return text.toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '') // remove special chars
+    .replace(/\s+/g, '-')         // replace spaces with -
+    .replace(/-+/g, '-')          // replace multiple - with single -
+    .trim();
+}
 
 // ==================== 2. INITIALIZATION & SESSION ====================
 document.addEventListener("DOMContentLoaded", async () => {
+  loadCategories();
   initUIStatus();
   await checkSession();
   setupEventListeners();
@@ -135,6 +191,8 @@ function showLogin() {
 async function showDashboard() {
   document.getElementById("login-container").classList.add("hidden");
   document.getElementById("dashboard-container").classList.remove("hidden");
+  loadCategories();
+  renderCategoryDropdown();
   await fetchProducts();
 }
 
@@ -167,54 +225,136 @@ function saveLocalDB() {
   localStorage.setItem("afilli_menu_products", JSON.stringify(productsList));
 }
 
-function renderAdminProducts() {
-  const tatliBody = document.getElementById("table-body-tatli");
-  const icecekBody = document.getElementById("table-body-icecek");
-  
-  tatliBody.innerHTML = "";
-  icecekBody.innerHTML = "";
-  
-  let tatliCount = 0;
-  let icecekCount = 0;
+function renderAdminStats() {
+  const statsSection = document.querySelector(".admin-stats-section");
+  if (!statsSection) return;
 
-  productsList.forEach(product => {
-    const row = document.createElement("tr");
-    row.dataset.id = product.id;
+  statsSection.innerHTML = "";
 
-    const tagBadge = product.tag 
-      ? `<span class="badge-tag">${product.tag}</span>` 
-      : `<span class="badge-empty">Yok</span>`;
+  categoriesList.forEach(cat => {
+    const count = productsList.filter(p => p.category === cat.id).length;
+    let iconClass = "fa-solid fa-utensils";
+    if (cat.id === "tatli") iconClass = "fa-solid fa-cookie-bite";
+    else if (cat.id === "icecek") iconClass = "fa-solid fa-mug-hot";
 
-    row.innerHTML = `
-      <td class="td-image">
-        <img src="${product.image}" alt="${product.name}" class="table-img">
-      </td>
-      <td class="td-name"><strong>${product.name}</strong></td>
-      <td class="td-desc"><p class="admin-desc-truncate">${product.description}</p></td>
-      <td class="td-price">${product.price} TL</td>
-      <td class="td-tag">${tagBadge}</td>
-      <td class="td-actions">
-        <button class="action-btn edit-btn" onclick="openEditModal('${product.id}')" title="Düzenle">
-          <i class="fa-solid fa-pen"></i>
-        </button>
-        <button class="action-btn delete-btn" onclick="openDeleteConfirm('${product.id}')" title="Sil">
-          <i class="fa-solid fa-trash"></i>
-        </button>
-      </td>
+    const card = document.createElement("div");
+    card.className = "stat-card animate-fade-in";
+    card.innerHTML = `
+      <i class="${iconClass}"></i>
+      <div>
+        <h3>${cat.name}</h3>
+        <p>${count} Ürün</p>
+      </div>
     `;
-
-    if (product.category === "tatli") {
-      tatliBody.appendChild(row);
-      tatliCount++;
-    } else {
-      icecekBody.appendChild(row);
-      icecekCount++;
-    }
+    statsSection.appendChild(card);
   });
 
-  // Update Stats counts
-  document.getElementById("stat-tatli-count").innerText = `${tatliCount} Ürün`;
-  document.getElementById("stat-icecek-count").innerText = `${icecekCount} Ürün`;
+  // Connection status card
+  const connCard = document.createElement("div");
+  connCard.className = "stat-card animate-fade-in";
+  const statusEl = isLiveDatabase 
+    ? `<span class="badge-live"><i class="fa-solid fa-cloud"></i> Supabase Bulut Aktif</span>`
+    : `<span class="badge-offline"><i class="fa-solid fa-desktop"></i> Lokal Mod Aktif</span>`;
+  connCard.innerHTML = `
+    <i class="fa-solid fa-database"></i>
+    <div>
+      <h3>Durum</h3>
+      <p id="stat-connection-status">${statusEl}</p>
+    </div>
+  `;
+  statsSection.appendChild(connCard);
+}
+
+function renderAdminProducts() {
+  renderCategoryDropdown();
+  renderAdminStats();
+
+  const tablesSection = document.querySelector(".admin-tables-section");
+  if (!tablesSection) return;
+
+  tablesSection.innerHTML = "";
+
+  categoriesList.forEach(cat => {
+    const catProducts = productsList.filter(p => p.category === cat.id);
+    
+    const card = document.createElement("div");
+    card.className = "admin-card admin-table-container animate-fade-in";
+    
+    const isDefault = cat.id === "tatli" || cat.id === "icecek";
+    const deleteButtonHtml = !isDefault 
+      ? `<button type="button" class="admin-btn-outline delete-cat-btn" onclick="openDeleteCategoryConfirm('${cat.id}')" style="background: transparent; color: var(--text-dark); border: 1px solid rgba(46, 22, 16, 0.2); font-size: 0.8rem; padding: 6px 12px; border-radius: var(--border-radius-sm); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: var(--transition-smooth);" onmouseover="this.style.borderColor='var(--text-dark)'; this.style.background='rgba(46, 22, 16, 0.05)';" onmouseout="this.style.borderColor='rgba(46, 22, 16, 0.2)'; this.style.background='transparent';">
+          <i class="fa-solid fa-folder-minus"></i> Kategoriyi Sil
+         </button>`
+      : "";
+
+    card.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+        <h2 class="table-title" style="margin-bottom: 0 !important; display: flex; align-items: center; gap: 8px;">
+          <span>${cat.icon}</span> ${cat.name.toUpperCase()}
+        </h2>
+        ${deleteButtonHtml}
+      </div>
+      <div class="table-responsive">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Görsel</th>
+              <th>Ürün Adı</th>
+              <th>Açıklama</th>
+              <th>Fiyat</th>
+              <th>Etiket</th>
+              <th>İşlemler</th>
+            </tr>
+          </thead>
+          <tbody id="table-body-${cat.id}">
+            <!-- Product rows in this category -->
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    tablesSection.appendChild(card);
+
+    const tbody = document.getElementById(`table-body-${cat.id}`);
+    if (catProducts.length === 0) {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 30px;">
+          <i class="fa-regular fa-folder-open" style="font-size: 1.5rem; display: block; margin-bottom: 8px;"></i>
+          Bu kategoride henüz ürün bulunmuyor.
+        </td>
+      `;
+      tbody.appendChild(row);
+    } else {
+      catProducts.forEach(product => {
+        const row = document.createElement("tr");
+        row.dataset.id = product.id;
+
+        const tagBadge = product.tag 
+          ? `<span class="badge-tag">${product.tag}</span>` 
+          : `<span class="badge-empty">Yok</span>`;
+
+        row.innerHTML = `
+          <td class="td-image">
+            <img src="${product.image}" alt="${product.name}" class="table-img">
+          </td>
+          <td class="td-name"><strong>${product.name}</strong></td>
+          <td class="td-desc"><p class="admin-desc-truncate">${product.description}</p></td>
+          <td class="td-price">${product.price} TL</td>
+          <td class="td-tag">${tagBadge}</td>
+          <td class="td-actions">
+            <button type="button" class="action-btn edit-btn" onclick="openEditModal('${product.id}')" title="Düzenle">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button type="button" class="action-btn delete-btn" onclick="openDeleteConfirm('${product.id}')" title="Sil">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+  });
 }
 
 // ==================== 5. MODAL LOGIC ====================
@@ -264,7 +404,20 @@ function openDeleteConfirm(id) {
   if (!product) return;
 
   activeDeleteId = id;
+  activeDeleteType = "product";
+  document.querySelector(".admin-confirm-content h2").innerText = "Ürünü Sil?";
   document.getElementById("confirm-delete-text").innerText = `"${product.name}" ürününü menüden kalıcı olarak silmek istediğinize emin misiniz?`;
+  openModal("confirm-modal");
+}
+
+function openDeleteCategoryConfirm(catId) {
+  const cat = categoriesList.find(c => c.id === catId);
+  if (!cat) return;
+
+  activeDeleteId = catId;
+  activeDeleteType = "category";
+  document.querySelector(".admin-confirm-content h2").innerText = "Kategoriyi Sil?";
+  document.getElementById("confirm-delete-text").innerText = `"${cat.name}" kategorisini ve bu kategoriye ait tüm ürünleri silmek istediğinize emin misiniz?`;
   openModal("confirm-modal");
 }
 
@@ -385,22 +538,44 @@ async function handleProductSave(e) {
 async function handleDeleteProduct() {
   if (!activeDeleteId) return;
 
-  if (isLiveDatabase && supabaseClient) {
-    const { error } = await supabaseClient
-      .from("products")
-      .delete()
-      .eq("id", activeDeleteId);
+  if (activeDeleteType === "product") {
+    if (isLiveDatabase && supabaseClient) {
+      const { error } = await supabaseClient
+        .from("products")
+        .delete()
+        .eq("id", activeDeleteId);
 
-    if (error) {
-      alert("Silme başarısız: " + error.message);
+      if (error) {
+        alert("Silme başarısız: " + error.message);
+      }
+    } else {
+      productsList = productsList.filter(p => p.id !== activeDeleteId);
+      saveLocalDB();
     }
-  } else {
-    productsList = productsList.filter(p => p.id !== activeDeleteId);
-    saveLocalDB();
+  } else if (activeDeleteType === "category") {
+    // Delete Category
+    categoriesList = categoriesList.filter(c => c.id !== activeDeleteId);
+    saveCategories();
+
+    // Delete products under this category
+    if (isLiveDatabase && supabaseClient) {
+      const { error } = await supabaseClient
+        .from("products")
+        .delete()
+        .eq("category", activeDeleteId);
+
+      if (error) {
+        alert("Kategori ürünleri silinirken hata: " + error.message);
+      }
+    } else {
+      productsList = productsList.filter(p => p.category !== activeDeleteId);
+      saveLocalDB();
+    }
   }
 
   closeModal("confirm-modal");
   activeDeleteId = null;
+  activeDeleteType = null;
   await fetchProducts();
 }
 
@@ -445,20 +620,63 @@ function closeModal(id) {
   document.body.style.overflow = "";
 }
 
+async function handleCategorySave(e) {
+  e.preventDefault();
+  const errorEl = document.getElementById("category-form-error");
+  errorEl.innerText = "";
+
+  const name = document.getElementById("category-name").value.trim();
+  const icon = document.getElementById("category-icon").value.trim();
+
+  if (!name || !icon) {
+    errorEl.innerText = "Lütfen tüm alanları doldurun!";
+    return;
+  }
+
+  const catId = slugify(name);
+  if (!catId) {
+    errorEl.innerText = "Geçersiz kategori adı!";
+    return;
+  }
+
+  const existing = categoriesList.find(c => c.id === catId);
+  if (existing) {
+    errorEl.innerText = "Bu isimde bir kategori zaten mevcut!";
+    return;
+  }
+
+  categoriesList.push({ id: catId, name, icon });
+  saveCategories();
+
+  document.getElementById("category-form").reset();
+  closeModal("category-modal");
+  renderCategoryDropdown();
+  await fetchProducts();
+}
+
 function setupEventListeners() {
   // Forms
   document.getElementById("login-form").addEventListener("submit", handleLogin);
   document.getElementById("product-form").addEventListener("submit", handleProductSave);
+  document.getElementById("category-form").addEventListener("submit", handleCategorySave);
 
   // Clicks
   document.getElementById("btn-logout").addEventListener("click", handleLogout);
   document.getElementById("btn-add-product").addEventListener("click", openAddModal);
+  document.getElementById("btn-add-category").addEventListener("click", () => {
+    document.getElementById("category-form").reset();
+    document.getElementById("category-form-error").innerText = "";
+    openModal("category-modal");
+  });
   document.getElementById("btn-confirm-delete").addEventListener("click", handleDeleteProduct);
   
   // Modal Close buttons
   document.getElementById("close-product-modal").addEventListener("click", () => closeModal("product-modal"));
   document.getElementById("btn-cancel-product").addEventListener("click", () => closeModal("product-modal"));
   document.getElementById("btn-cancel-delete").addEventListener("click", () => closeModal("confirm-modal"));
+  
+  document.getElementById("close-category-modal").addEventListener("click", () => closeModal("category-modal"));
+  document.getElementById("btn-cancel-category").addEventListener("click", () => closeModal("category-modal"));
 
   // File Upload
   document.getElementById("btn-trigger-upload").addEventListener("click", () => {
@@ -480,3 +698,4 @@ function setupEventListeners() {
 // Attach functions to global scope for HTML inline calls
 window.openEditModal = openEditModal;
 window.openDeleteConfirm = openDeleteConfirm;
+window.openDeleteCategoryConfirm = openDeleteCategoryConfirm;

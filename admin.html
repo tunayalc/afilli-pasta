@@ -67,6 +67,9 @@
         <button class="admin-btn-accent" id="btn-add-product">
           <i class="fa-solid fa-plus"></i> Yeni Ürün Ekle
         </button>
+        <button class="admin-btn-primary" id="btn-add-category" style="background-color: var(--text-dark) !important; color: var(--card-bg) !important; border-color: var(--text-dark) !important;">
+          <i class="fa-solid fa-folder-plus"></i> Kategori Ekle
+        </button>
         <button class="admin-btn-outline" id="btn-logout" title="Güvenli Çıkış">
           <i class="fa-solid fa-right-from-bracket"></i> Çıkış
         </button>
@@ -101,53 +104,8 @@
         </div>
       </section>
 
-      <!-- Products Management Tables -->
+      <!-- Products Management Tables (Rendered Dynamically) -->
       <section class="admin-tables-section">
-        
-        <!-- Tatlılar & Pastalar -->
-        <div class="admin-table-container">
-          <h2 class="table-title">🍰 Tatlılar & Pastalar</h2>
-          <div class="table-responsive">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>Görsel</th>
-                  <th>Ürün Adı</th>
-                  <th>Açıklama</th>
-                  <th>Fiyat</th>
-                  <th>Etiket</th>
-                  <th class="actions-header">İşlemler</th>
-                </tr>
-              </thead>
-              <tbody id="table-body-tatli">
-                <!-- Loaded dynamically -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- İçecekler -->
-        <div class="admin-table-container">
-          <h2 class="table-title">☕ İçecekler</h2>
-          <div class="table-responsive">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>Görsel</th>
-                  <th>Ürün Adı</th>
-                  <th>Açıklama</th>
-                  <th>Fiyat</th>
-                  <th>Etiket</th>
-                  <th class="actions-header">İşlemler</th>
-                </tr>
-              </thead>
-              <tbody id="table-body-icecek">
-                <!-- Loaded dynamically -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
       </section>
     </main>
   </div>
@@ -173,8 +131,7 @@
           <div class="form-group half">
             <label for="product-category">Kategori</label>
             <select id="product-category" required>
-              <option value="tatli">🍰 Tatlı & Pastalar</option>
-              <option value="icecek">☕ İçecekler</option>
+              <!-- Dynamic Category Options Rendered from admin.js -->
             </select>
           </div>
         </div>
@@ -242,6 +199,37 @@
         <button class="admin-btn-outline" id="btn-cancel-delete">İptal</button>
         <button class="admin-btn-danger" id="btn-confirm-delete">Evet, Sil</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Add Category Modal -->
+  <div class="modal-overlay" id="category-modal" aria-hidden="true">
+    <div class="admin-modal-content" style="max-width: 400px; border-left: 6px solid var(--accent-gold) !important;">
+      <button class="close-modal-btn" id="close-category-modal" aria-label="Kapat">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <h2 class="modal-title">Yeni Kategori Ekle</h2>
+      
+      <form id="category-form" class="admin-form">
+        <div class="form-group">
+          <label for="category-name">Kategori Adı</label>
+          <input type="text" id="category-name" required placeholder="Örn: Kahvaltı">
+        </div>
+        
+        <div class="form-group">
+          <label for="category-icon">Kategori Emojisi</label>
+          <input type="text" id="category-icon" required placeholder="Örn: 🍳" style="padding-left: 15px !important;">
+        </div>
+
+        <div class="error-message" id="category-form-error"></div>
+        
+        <div class="modal-actions">
+          <button type="button" class="admin-btn-outline" id="btn-cancel-category">İptal</button>
+          <button type="submit" class="admin-btn-primary">
+            <i class="fa-solid fa-floppy-disk"></i> Kaydet
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 

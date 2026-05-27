@@ -286,12 +286,66 @@ let products = [
 let currentCategory = "tatli";
 let searchQuery = "";
 
+// Dynamic Categories
+const defaultCategories = [
+  { id: "tatli", name: "Tatlı & Pastalar", icon: "🍰" },
+  { id: "icecek", name: "İçecekler", icon: "☕" }
+];
+let categoriesList = [];
+
+function loadCategories() {
+  const localCats = localStorage.getItem("afilli_menu_categories");
+  if (localCats) {
+    try {
+      categoriesList = JSON.parse(localCats);
+    } catch (e) {
+      console.error("Failed to parse categories, using default.", e);
+      categoriesList = [...defaultCategories];
+    }
+  } else {
+    categoriesList = [...defaultCategories];
+    localStorage.setItem("afilli_menu_categories", JSON.stringify(categoriesList));
+  }
+}
+
+function renderCategories() {
+  const container = document.querySelector(".tabs-container");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  categoriesList.forEach(cat => {
+    const btn = document.createElement("button");
+    btn.className = `menu-tab ${cat.id === currentCategory ? "active" : ""}`;
+    btn.dataset.category = cat.id;
+    btn.id = `tab-${cat.id}`;
+    btn.innerHTML = `<span>${cat.icon}</span> ${cat.name.toUpperCase()}`;
+
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".menu-tab").forEach(t => t.classList.remove("active"));
+      btn.classList.add("active");
+      currentCategory = cat.id;
+      renderProducts();
+    });
+
+    container.appendChild(btn);
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initMenu();
   setupEventListeners();
 });
 
 async function initMenu() {
+  loadCategories();
+  
+  if (categoriesList.length > 0 && !categoriesList.find(c => c.id === currentCategory)) {
+    currentCategory = categoriesList[0].id;
+  }
+  
+  renderCategories();
+
   // 1. First render using local fallback dataset (instant load)
   // Check if there are local modifications in LocalStorage (for local CEO Panel testing)
   const localData = localStorage.getItem("afilli_menu_products");
@@ -326,16 +380,6 @@ async function initMenu() {
 }
 
 function setupEventListeners() {
-  // Tab switching
-  const tabs = document.querySelectorAll(".menu-tab");
-  tabs.forEach(tab => {
-    tab.addEventListener("click", () => {
-      tabs.forEach(t => t.classList.remove("active"));
-      tab.classList.add("active");
-      currentCategory = tab.dataset.category;
-      renderProducts();
-    });
-  });
 
   // Search input
   const searchInput = document.getElementById("search-input");
@@ -452,17 +496,24 @@ function renderProducts() {
 
   // Group by category if searching globally
   if (searchQuery) {
-    const categories = {
-      tatli: { name: "🍰 Tatlı & Pastalar", items: [] },
-      icecek: { name: "☕ İçecekler", items: [] }
-    };
-
-    filtered.forEach(p => {
-      categories[p.category].items.push(p);
+    const searchCategories = {};
+    categoriesList.forEach(c => {
+      searchCategories[c.id] = { name: `${c.icon} ${c.name}`, items: [] };
     });
 
-    Object.keys(categories).forEach(catKey => {
-      const cat = categories[catKey];
+    filtered.forEach(p => {
+      if (searchCategories[p.category]) {
+        searchCategories[p.category].items.push(p);
+      } else {
+        if (!searchCategories["other"]) {
+          searchCategories["other"] = { name: "✨ Diğer Ürünler", items: [] };
+        }
+        searchCategories["other"].items.push(p);
+      }
+    });
+
+    Object.keys(searchCategories).forEach(catKey => {
+      const cat = searchCategories[catKey];
       if (cat.items.length > 0) {
         const header = document.createElement("div");
         header.className = "search-category-header";
