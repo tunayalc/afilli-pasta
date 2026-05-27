@@ -673,16 +673,6 @@ function setupEventListeners() {
     document.getElementById("category-form").reset();
     document.getElementById("category-form-error").innerText = "";
     openModal("category-modal");
-  });
-  document.getElementById("btn-reset-menu").addEventListener("click", async () => {
-    if (confirm("Tüm değişikliklerinizi sıfırlayıp 29 ürünlük orijinal şık demo menüyü geri yüklemek istediğinize emin misiniz?")) {
-      localStorage.removeItem("afilli_menu_products");
-      localStorage.removeItem("afilli_menu_categories");
-      loadCategories();
-      await fetchProducts();
-      alert("Menü başarıyla varsayılan demo ayarlarına sıfırlandı!");
-    }
-  });
   document.getElementById("btn-confirm-delete").addEventListener("click", handleDeleteProduct);
   
   // Modal Close buttons
