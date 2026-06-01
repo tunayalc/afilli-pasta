@@ -9,10 +9,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../style.css">
   
   <!-- Custom Favicon -->
-  <link rel="icon" type="image/jpeg" href="images/favicon.jpg">
+  <link rel="icon" type="image/jpeg" href="../images/favicon.jpg">
 </head>
 <body class="admin-body">
 
@@ -20,7 +20,9 @@
   <div class="admin-login-wrapper" id="login-container">
     <div class="admin-login-card animate-fade-in">
       <div class="login-header">
-        <div class="login-logo">👑</div>
+        <div class="login-logo">
+          <img src="../images/favicon.jpg" alt="Afilli Cafe Logo" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--accent-gold); box-shadow: 0 4px 10px rgba(0,0,0,0.15); object-fit: cover;">
+        </div>
         <h2>Afilli Cafe</h2>
         <p>CEO Yönetici Girişi</p>
       </div>
@@ -57,7 +59,7 @@
     <!-- Admin Header -->
     <header class="admin-header">
       <div class="admin-brand">
-        <span class="admin-crown">👑</span>
+        <img src="../images/favicon.jpg" alt="Afilli Cafe Logo" style="width: 50px; height: 50px; border-radius: 50%; border: 2.5px solid var(--text-dark); box-shadow: 0 3px 6px rgba(0,0,0,0.12); object-fit: cover;">
         <div>
           <h1>Afilli Cafe CEO</h1>
           <p>Dijital Menü Yönetim Paneli</p>
@@ -237,6 +239,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <!-- Admin Script Logic -->
-  <script src="admin.js"></script>
+  <script src="../admin.js"></script>
 </body>
 </html>

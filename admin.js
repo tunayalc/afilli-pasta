@@ -59,6 +59,13 @@ let activeDeleteId = null;
 let activeDeleteType = null; // 'product' or 'category'
 let currentUploadedBase64 = null;
 
+function getCorrectImagePath(path) {
+  if (!path) return "../images/san_sebastian.png";
+  if (path.startsWith("http") || path.startsWith("data:")) return path;
+  if (path.startsWith("../")) return path;
+  return "../" + path;
+}
+
 // Dynamic Categories
 const defaultCategories = [
   { id: "tatli", name: "Tatlı & Pastalar", icon: "🍰" },
@@ -342,7 +349,7 @@ function renderAdminProducts() {
 
         row.innerHTML = `
           <td class="td-image">
-            <img src="${product.image}" alt="${product.name}" class="table-img">
+            <img src="${getCorrectImagePath(product.image)}" alt="${product.name}" class="table-img">
           </td>
           <td class="td-name"><strong>${product.name}</strong></td>
           <td class="td-desc"><p class="admin-desc-truncate">${product.description}</p></td>
@@ -395,7 +402,7 @@ function openEditModal(id) {
   
   // Show preview of existing image
   const imgEl = document.getElementById("image-preview");
-  imgEl.src = product.image;
+  imgEl.src = getCorrectImagePath(product.image);
   imgEl.classList.remove("hidden");
   document.getElementById("preview-placeholder").classList.add("hidden");
   currentUploadedBase64 = null;
