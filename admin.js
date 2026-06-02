@@ -680,6 +680,7 @@ function setupEventListeners() {
     document.getElementById("category-form").reset();
     document.getElementById("category-form-error").innerText = "";
     openModal("category-modal");
+  });
   document.getElementById("btn-confirm-delete").addEventListener("click", handleDeleteProduct);
   
   // Modal Close buttons
